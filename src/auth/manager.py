@@ -3,12 +3,16 @@ from typing import Optional
 
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, schemas, models
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from auth.database import User, get_user_db
 
+dotenv_path = find_dotenv()
+if dotenv_path:
+    load_dotenv(dotenv_path)
+else:
+    load_dotenv(".env.example")
 
-load_dotenv()
 
 SECRET = os.getenv("MANAGER_SECRET_KEY")
 
