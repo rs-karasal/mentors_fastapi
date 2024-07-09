@@ -1,6 +1,7 @@
 import datetime
 
 from sqlalchemy import (
+    Boolean,
     Column,   
     ForeignKey, 
     Integer,
@@ -32,6 +33,8 @@ user = Table(
     Column("full_name", String, nullable=False),
     Column("hashed_password", String, nullable=False),
     Column("registered_at", TIMESTAMP, default=datetime.datetime.utcnow, nullable=False),
-    Column("is_active", Integer, nullable=False),
-    Column("role_id", Integer, ForeignKey("role.id"), nullable=False),
+    Column("role_id", Integer, ForeignKey(role.c.id), nullable=False),
+    Column("is_active", Boolean, default=True, nullable=False),
+    Column("is_superuser", Boolean, default=False, nullable=False),
+    Column("is_verified", Boolean, default=False, nullable=False),
 )
