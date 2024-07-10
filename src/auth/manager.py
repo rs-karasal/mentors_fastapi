@@ -5,7 +5,7 @@ from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, schemas, models
 from dotenv import load_dotenv, find_dotenv
 
-from auth.database import User, get_user_db
+from src.auth.database import User, get_user_db
 
 dotenv_path = find_dotenv()
 if dotenv_path:

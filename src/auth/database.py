@@ -7,9 +7,9 @@ from sqlalchemy import String, Boolean, Integer, TIMESTAMP, ForeignKey
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from auth.models import role
+from src.auth.models import role
 
-DATABASE_URL = "sqlite+aiosqlite:///mentores.db"
+DATABASE_URL = "sqlite+aiosqlite:///./mentores.db"
 
 
 class Base(DeclarativeBase):
