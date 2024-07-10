@@ -5,6 +5,7 @@ from src.auth.manager import get_user_manager
 from src.auth.auth import auth_backend
 from src.auth.database import User
 from src.auth.schemas import UserRead, UserCreate
+from src.chat.router import router as chat_router
 
 
 main_app = FastAPI(
@@ -12,6 +13,7 @@ main_app = FastAPI(
 )
 
 
+# Auth routers - Fastapi-Users
 fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
     [auth_backend],
@@ -30,3 +32,7 @@ main_app.include_router(
     prefix="/auth",
     tags=["auth"],
 )
+
+
+# Chat routers
+main_app.include_router(chat_router)
