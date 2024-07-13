@@ -3,7 +3,7 @@ from fastapi_users import FastAPIUsers
 
 from src.auth.manager import get_user_manager
 from src.auth.auth import auth_backend
-from src.auth.database import User
+from src.auth.models import User
 from src.auth.schemas import UserRead, UserCreate
 from src.chat.router import router as chat_router
 
