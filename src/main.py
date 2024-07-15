@@ -10,11 +10,21 @@ from src.auth.schemas import UserRead, UserCreate
 from src.chat.router import router as chat_router
 
 
-# TODO: cors
-
-
 main_app = FastAPI(
     title="Mentores platform",
+)
+
+
+origins = [
+    "http://localhost:3000",
+]
+
+main_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
