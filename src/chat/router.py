@@ -3,7 +3,7 @@ from datetime import datetime
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
-from src.chat.models import Message
+from src.chat.schemas import Message
 from src.chat.manager import ConnectionManager
 
 router = APIRouter()
