@@ -1,6 +1,8 @@
 from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from .schemas import MessageCreate
 from src.abstracts.models import AbstractModel
 from src.database import Base
 
@@ -12,7 +14,7 @@ class Chat(Base, AbstractModel):
     name: Mapped[str] = mapped_column(String, nullable=False)
 
     messages = relationship("Message", back_populates="chat")
-    chat_member = relationship("User", back_populates="chat")
+    members = relationship("ChatMember", back_populates="chat")
 
 
 class Message(Base, AbstractModel):
@@ -24,7 +26,14 @@ class Message(Base, AbstractModel):
     from_user: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
 
     chat = relationship("Chat", back_populates="messages")
-    # user = relationship("User", back_populates="messages")
+    user = relationship("User", back_populates="messages")
+
+    @classmethod
+    async def make_message(cls, db: AsyncSession, message_data: MessageCreate) -> None:
+        db_message = cls(**message_data.dict())
+        db.add(db_message)
+        await db.commit()
+        await db.refresh(db_message)
 
 
 class ChatMember(Base):
@@ -33,5 +42,5 @@ class ChatMember(Base):
     chat_id: Mapped[int] = mapped_column(Integer, ForeignKey("chats.id"), primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), primary_key=True)
 
-    chat = relationship("Chat", back_populates="chat_member")
-    # user = relationship("User", back_populates="chat_member")
+    chat = relationship("Chat", back_populates="members")
+    user = relationship("User", back_populates="chats")
