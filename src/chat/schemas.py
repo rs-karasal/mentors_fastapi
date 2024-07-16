@@ -2,8 +2,22 @@ from pydantic import BaseModel
 from datetime import datetime
 
 
-class Message(BaseModel):
+class MessageBase(BaseModel):
     chat_id: int
-    sender: str
-    content: str
-    timestamp: datetime = datetime.now()
+    from_user: int
+    text: str
+
+    class Config:
+        from_attributes = True
+
+
+class MessageCreate(MessageBase):
+    pass
+
+
+class MessageInDB(MessageBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
