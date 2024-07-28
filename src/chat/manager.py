@@ -2,29 +2,57 @@ from fastapi import WebSocket
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Dict, List
 
+from src.auth.models import User
 from src.chat.schemas import MessageCreate
 from src.chat.models import Message as MessageModel
 
 
+# class ConnectionManager:
+#     def __init__(self):
+#         self.active_connections: Dict[str, List[WebSocket]] = {}
+#
+#     async def connect(self, websocket: WebSocket, chat_id: str):
+#         await websocket.accept()
+#         if chat_id not in self.active_connections:
+#             self.active_connections[chat_id] = []
+#         self.active_connections[chat_id].append(websocket)
+#
+#     def disconnect(self, websocket: WebSocket, chat_id: str):
+#         self.active_connections[chat_id].remove(websocket)
+#         if not self.active_connections[chat_id]:
+#             del self.active_connections[chat_id]
+#
+#     async def broadcast(self, message: str, chat_id: str):
+#         if chat_id in self.active_connections:
+#             for connection in self.active_connections[chat_id]:
+#                 await connection.send_text(message)
+#
+#     async def save_message(
+#         self, db: AsyncSession, message_data: MessageCreate
+#     ) -> MessageModel:
+#         db_message = await MessageModel.make_message(db, message_data)
+#         return db_message
+
+
 class ConnectionManager:
     def __init__(self):
-        self.active_connections: Dict[str, List[WebSocket]] = {}
+        self.active_connections: Dict[str, List[Dict[str, WebSocket]]] = {}
 
-    async def connect(self, websocket: WebSocket, chat_id: str):
+    async def connect(self, websocket: WebSocket, chat_id: str, user: User):
         await websocket.accept()
         if chat_id not in self.active_connections:
             self.active_connections[chat_id] = []
-        self.active_connections[chat_id].append(websocket)
+        self.active_connections[chat_id].append({"websocket": websocket, "user": user})
 
     def disconnect(self, websocket: WebSocket, chat_id: str):
-        self.active_connections[chat_id].remove(websocket)
+        self.active_connections[chat_id] = [conn for conn in self.active_connections[chat_id] if conn["websocket"] != websocket]
         if not self.active_connections[chat_id]:
             del self.active_connections[chat_id]
 
     async def broadcast(self, message: str, chat_id: str):
         if chat_id in self.active_connections:
             for connection in self.active_connections[chat_id]:
-                await connection.send_text(message)
+                await connection["websocket"].send_text(message)
 
     async def save_message(
         self, db: AsyncSession, message_data: MessageCreate
