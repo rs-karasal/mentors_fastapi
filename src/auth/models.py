@@ -1,10 +1,13 @@
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 from sqlalchemy import Integer, String, TIMESTAMP, Boolean, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.abstracts.models import AbstractModel
 from src.database import Base
+
+
+UTC = timezone.utc
 
 
 class AccountType(Base):

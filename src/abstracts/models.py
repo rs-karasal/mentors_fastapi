@@ -1,6 +1,9 @@
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from sqlalchemy import TIMESTAMP, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
+
+
+UTC = timezone.utc
 
 
 class AbstractModel:
