@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from sqlalchemy import TIMESTAMP, DateTime
+from sqlalchemy import TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column
 
 
