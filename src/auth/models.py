@@ -33,7 +33,7 @@ class User(SQLAlchemyBaseUserTable[int], Base, AbstractModel):
     last_name: Mapped[str] = mapped_column(String(length=100), nullable=False)
     hashed_password: Mapped[str] = mapped_column(String(length=1024), nullable=False)
     registered_at: Mapped[TIMESTAMP] = mapped_column(
-        TIMESTAMP, nullable=False, default=datetime.now(UTC)
+        TIMESTAMP(timezone=True), nullable=False, default=lambda: datetime.now(UTC)
     )
     account_type_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("account_types.id"), nullable=False, default=1
