@@ -5,7 +5,8 @@ from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, schemas, models
 from dotenv import load_dotenv, find_dotenv
 
-from src.auth.database import User, get_user_db
+from src.auth.models import User
+from src.auth.utils import get_user_db
 
 dotenv_path = find_dotenv()
 if dotenv_path:
@@ -43,7 +44,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         )
         password = user_dict.pop("password")
         user_dict["hashed_password"] = self.password_helper.hash(password)
-        user_dict["role_id"] = 1
+        user_dict["account_type_id"] = 1
 
         created_user = await self.user_db.create(user_dict)
 

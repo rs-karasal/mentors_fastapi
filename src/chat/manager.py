@@ -1,5 +1,9 @@
 from fastapi import WebSocket
+from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Dict, List
+
+from src.chat.schemas import MessageCreate
+from src.chat.models import Message as MessageModel
 
 
 class ConnectionManager:
@@ -21,3 +25,9 @@ class ConnectionManager:
         if chat_id in self.active_connections:
             for connection in self.active_connections[chat_id]:
                 await connection.send_text(message)
+
+    async def save_message(
+        self, db: AsyncSession, message_data: MessageCreate
+    ) -> MessageModel:
+        db_message = await MessageModel.make_message(db, message_data)
+        return db_message

@@ -1,5 +1,9 @@
 import os
-from fastapi_users.authentication import CookieTransport, AuthenticationBackend, JWTStrategy
+from fastapi_users.authentication import (
+    CookieTransport,
+    AuthenticationBackend,
+    JWTStrategy,
+)
 from dotenv import load_dotenv, find_dotenv
 
 # Load environment variables from .env
