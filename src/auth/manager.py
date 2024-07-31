@@ -3,19 +3,13 @@ from typing import Optional
 
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, schemas, models
-from dotenv import load_dotenv, find_dotenv
 
 from src.auth.models import User
 from src.auth.utils import get_user_db
-
-dotenv_path = find_dotenv()
-if dotenv_path:
-    load_dotenv(dotenv_path)
-else:
-    load_dotenv(".env.example")
+from src.config import Config
 
 
-SECRET = os.getenv("MANAGER_SECRET_KEY")
+SECRET = Config.SECRET
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
